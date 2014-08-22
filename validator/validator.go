@@ -30,11 +30,13 @@ func IsValid(acronym string, productName []string) bool {
 		// Checking word GISi, Zombie, Tracker, 3000
 		fmt.Println("Testing - " + productNameWord)
 		for letterIndex, acronymLetter := range acronymChars {
-			// for i := 0; i < len(acronymChars); i++ {
 			// Checking letters G, I, Z, T, K, 3 in word GISi, Zombie, Tracker, 3000
+
+			fmt.Printf("\"%v\"\n", letterIndex)
+
 			if strings.ContainsAny(productNameWord, acronymChars[letterIndex]) { // Check if the word contains any of the acronym letters
 				fmt.Printf("acronym[%v] : %v is contained in productNameWord[%v][%v] : [%v][%v]\n", letterIndex, acronymChars[letterIndex], wordIndex, strings.Index(productNameWord, acronymLetter), productNameWord, string(productNameWord[strings.Index(productNameWord, acronymChars[letterIndex])]))
-				fmt.Println(acronymChars[letterIndex])
+
 				acronymLettersFound[letterIndex] = true
 				productsHavingLetter[wordIndex] = true
 
@@ -52,9 +54,10 @@ func IsValid(acronym string, productName []string) bool {
 				squashedProductName = strings.Join(squashedProductNameSplit, "")
 
 				// fmt.Println(squashedProductName)
-				// fmt.Println(validAcronymChars)
-				// fmt.Println(acronymChars)
-				// fmt.Println(productNameWord)
+				fmt.Println(validAcronymChars)
+				fmt.Println(acronymChars)
+				// fmt.Println(productNameWord
+
 			}
 		}
 	}
