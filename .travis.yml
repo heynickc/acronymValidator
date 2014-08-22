@@ -7,4 +7,6 @@ go:
   - 1.3
   - tip
 
+install: go get -v github.com/heynickc/acronymValidator/validator
+
 script: go test ./validator
