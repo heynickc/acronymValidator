@@ -14,7 +14,10 @@ func IsValid(acronym string, productName []string) bool {
 	for i, _ := range productName {
 		productName[i] = strings.ToLower(productName[i])
 	}
+
 	acronymChars := strings.Split(strings.ToLower(acronym), "")
+	acronymCharsCopy := make([]string, len(acronymChars))
+	copy(acronymCharsCopy, acronymChars)
 
 	// Container for valid acronym character matches against productName
 	productNamesRepresentedFlag := make([]bool, len(productName))
@@ -24,17 +27,16 @@ func IsValid(acronym string, productName []string) bool {
 	squashedProductName := strings.Join(productName, "|")
 	squashedProductNameChars := strings.Split(squashedProductName, "")
 	validAcronymChars := make([]string, 0)
+	validAcronymCharsIndex := make([]int, 0)
 
-	for _, acronymChar := range acronymChars {
-		for i := 0; i < len(productName); i++ {
+	for i, name := range productName {
+		for _, acronymChar := range acronymCharsCopy {
 
-			fmt.Printf("Testing acronymChar %v against product %v\n", acronymChar, productName[i])
-
-			if product := productName[i]; strings.Contains(product, acronymChar) && !productNamesRepresentedFlag[i] {
-				fmt.Printf("%v is located in %v\n", acronymChar, product)
+			if product := name; strings.Contains(product, acronymChar) && !productNamesRepresentedFlag[i] {
 
 				productNamesRepresentedFlag[i] = true
 				productNamesRepresented = append(productNamesRepresented, product)
+
 				break
 			}
 		}
@@ -43,26 +45,36 @@ func IsValid(acronym string, productName []string) bool {
 	for _, acronymChar := range acronymChars {
 
 		if strings.Contains(squashedProductName, acronymChar) {
+
 			acronymCharLocation := strings.Index(squashedProductName, acronymChar)
 			// Store valid acronym letter
 			validAcronymChars = append(validAcronymChars, acronymChar)
+			validAcronymCharsIndex = append(validAcronymCharsIndex, acronymCharLocation)
 			// Truncate product name up to found acronym character using slice syntax
 			// This keeps us from finding matches we already searched through
 			squashedProductNameChars = squashedProductNameChars[acronymCharLocation:]
 			squashedProductName = strings.Join(squashedProductNameChars, "")
 
 			continue
+		} else {
+			validAcronymCharsIndex = append(validAcronymCharsIndex, -1)
+		}
+	}
+
+	for _, isRepresented := range productNamesRepresentedFlag {
+		if !isRepresented {
+			return false
 		}
 	}
 
 	// Checks that there is an acronym letter for every productName string
-	fmt.Printf("Original product names: %v, Order of matched product names: %v\n", productName, productNamesRepresented)
+	// fmt.Printf("Original product names: %v, Order of matched product names: %v\n", productName, productNamesRepresented)
 	if !strings.EqualFold(strings.Join(productName, ""), strings.Join(productNamesRepresented, "")) {
 		return false
 	}
 
 	// Makes sure the overall acronym is in order, without considering productName boundaries
-	fmt.Printf("Original acronym: %v, Valid acronym characters: %v\n", strings.ToLower(acronym), strings.Join(validAcronymChars, ""))
+	// fmt.Printf("Original acronym: %v, Valid acronym characters: %v\n", strings.ToLower(acronym), strings.Join(validAcronymChars, ""))
 	if !strings.EqualFold(acronym, strings.Join(validAcronymChars, "")) { //EqualFold compares lower-case equality
 		return false
 	}
