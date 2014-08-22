@@ -26,14 +26,11 @@ func IsValid(acronym string, productName []string) bool {
 	validAcronymChars := make([]string, 0)
 
 	for _, acronymChar := range acronymChars {
-
-		// for productIndex, product := range productNameCopy {
 		for i := 0; i < len(productName); i++ {
 
-			product := productName[i]
+			fmt.Printf("Testing acronymChar %v against product %v\n", acronymChar, productName[i])
 
-			fmt.Printf("Testing acronymChar %v against product %v\n", acronymChar, product)
-			if strings.ContainsAny(product, acronymChar) && !productNamesRepresentedFlag[i] {
+			if product := productName[i]; strings.ContainsAny(product, acronymChar) && !productNamesRepresentedFlag[i] {
 				fmt.Printf("%v is located in %v\n", acronymChar, product)
 
 				productNamesRepresentedFlag[i] = true
@@ -46,7 +43,6 @@ func IsValid(acronym string, productName []string) bool {
 	for _, acronymChar := range acronymChars {
 
 		if strings.Contains(squashedProductName, acronymChar) {
-
 			acronymCharLocation := strings.Index(squashedProductName, acronymChar)
 			// Store valid acronym letter
 			validAcronymChars = append(validAcronymChars, acronymChar)
@@ -61,6 +57,7 @@ func IsValid(acronym string, productName []string) bool {
 		}
 	}
 
+	// Makes sure that every productName is represented by at least one letter
 	fmt.Println(productNamesRepresentedFlag)
 	for _, isRepresented := range productNamesRepresentedFlag {
 		if !isRepresented {
@@ -68,11 +65,14 @@ func IsValid(acronym string, productName []string) bool {
 		}
 	}
 
+	// This solves an edge case where acronym was SGE,
+	// which represents each productName, but is in the wrong order
 	fmt.Printf("Original product names: %v, Order of matched product names: %v\n", productName, productNamesRepresented)
 	if !strings.EqualFold(strings.Join(productName, ""), strings.Join(productNamesRepresented, "")) {
 		return false
 	}
 
+	// Makes sure the overall acronym is in order, without considering productName boundaries
 	fmt.Printf("Original acronym: %v, Valid acronym characters: %v\n", strings.ToLower(acronym), strings.Join(validAcronymChars, ""))
 	if !strings.EqualFold(acronym, strings.Join(validAcronymChars, "")) { //EqualFold compares lower-case equality
 		return false
@@ -80,10 +80,3 @@ func IsValid(acronym string, productName []string) bool {
 
 	return true
 }
-
-// func RemoveStringSliceCopy(slice []string, start, end int) []string {
-// 	result := make([]string, len(slice)-(end-start))
-// 	at := copy(result, slice[:start])
-// 	copy(result[at:], slice[end:])
-// 	return result
-// }
