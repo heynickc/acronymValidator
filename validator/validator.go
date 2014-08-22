@@ -30,7 +30,7 @@ func IsValid(acronym string, productName []string) bool {
 
 			fmt.Printf("Testing acronymChar %v against product %v\n", acronymChar, productName[i])
 
-			if product := productName[i]; strings.ContainsAny(product, acronymChar) && !productNamesRepresentedFlag[i] {
+			if product := productName[i]; strings.Contains(product, acronymChar) && !productNamesRepresentedFlag[i] {
 				fmt.Printf("%v is located in %v\n", acronymChar, product)
 
 				productNamesRepresentedFlag[i] = true
@@ -51,21 +51,11 @@ func IsValid(acronym string, productName []string) bool {
 			squashedProductNameChars = squashedProductNameChars[acronymCharLocation:]
 			squashedProductName = strings.Join(squashedProductNameChars, "")
 
-			// fmt.Println(squashedProductName)
-			// fmt.Println(validAcronymChars)
 			continue
 		}
 	}
 
-	// Makes sure that every productName is represented by at least one letter
-	fmt.Println(productNamesRepresentedFlag)
-	for _, isRepresented := range productNamesRepresentedFlag {
-		if !isRepresented {
-			return false
-		}
-	}
-	// This solves an edge case where acronym was SGE,
-	// which represents each productName, but is in the wrong order
+	// Checks that there is an acronym letter for every productName string
 	fmt.Printf("Original product names: %v, Order of matched product names: %v\n", productName, productNamesRepresented)
 	if !strings.EqualFold(strings.Join(productName, ""), strings.Join(productNamesRepresented, "")) {
 		return false
