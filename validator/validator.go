@@ -24,7 +24,6 @@ func IsValid(acronym string, productName []string) bool {
 	squashedProductName := strings.Join(productName, "|")
 	squashedProductNameChars := strings.Split(squashedProductName, "")
 	validAcronymChars := make([]string, 0)
-	validAcronymCharsIndex := make([]int, 0)
 
 	for i, name := range productName {
 		for _, acronymChar := range acronymCharsCopy {
@@ -46,7 +45,7 @@ func IsValid(acronym string, productName []string) bool {
 			acronymCharLocation := strings.Index(squashedProductName, acronymChar)
 			// Store valid acronym letter
 			validAcronymChars = append(validAcronymChars, acronymChar)
-			validAcronymCharsIndex = append(validAcronymCharsIndex, acronymCharLocation)
+
 			// Truncate product name up to found acronym character using slice syntax
 			// This keeps us from finding matches we already searched through
 			squashedProductNameChars = squashedProductNameChars[acronymCharLocation:]
