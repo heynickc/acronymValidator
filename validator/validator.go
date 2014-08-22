@@ -53,8 +53,6 @@ func IsValid(acronym string, productName []string) bool {
 			squashedProductName = strings.Join(squashedProductNameChars, "")
 
 			continue
-		} else {
-			validAcronymCharsIndex = append(validAcronymCharsIndex, -1)
 		}
 	}
 
