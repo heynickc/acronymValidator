@@ -2,8 +2,6 @@ package validator
 
 import (
 	"fmt"
-	// "sort"
-	// "strconv"
 	"strings"
 )
 
