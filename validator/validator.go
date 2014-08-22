@@ -12,7 +12,6 @@ func IsValid(acronym string, productName []string) bool {
 	for i, _ := range productName {
 		productName[i] = strings.ToLower(productName[i])
 	}
-
 	acronymChars := strings.Split(strings.ToLower(acronym), "")
 	acronymCharsCopy := make([]string, len(acronymChars))
 	copy(acronymCharsCopy, acronymChars)
