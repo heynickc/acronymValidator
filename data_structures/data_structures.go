@@ -2,7 +2,7 @@ package data_structures
 
 import (
 	"errors"
-	utils "github.com/heynickc/acronyValidator/utilities"
+	utils "github.com/heynickc/acronymValidator/utilities"
 	"strings"
 )
 
