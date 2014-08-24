@@ -23,13 +23,19 @@ func IsValid(acronym string, productName []string) bool {
 
 	for len(acronymChars) > 0 {
 		var char string
+		// Take each letter from acronym and test it against the product name
 		char, acronymChars = utils.Pop(acronymChars)
 		for i, name := range productName {
+			// Product name has the letter, try to insert it into the name's bucket
 			if strings.Contains(name, char) {
+				// If the bucket needs more room, it will resize
+				// If the bucket can't resize, it will return err
 				err := nameBucketList.AddItemAtIndex(i, char)
 				if err != nil {
+					// Bucket can't resize, so skip to the next word
 					continue
 				} else {
+					// Keeps things in order by truncating before the match
 					productName[i] = productName[i][strings.Index(name, char)+1:]
 					break
 				}
@@ -41,6 +47,8 @@ func IsValid(acronym string, productName []string) bool {
 	}
 
 	matchedAcronymChars := nameBucketList.GetAllItemsSquashed()
+	// Checks the buckets against the input acronym
+	// Returns false to IsValid if the conditions aren't met
 	if !strings.EqualFold(acronym, matchedAcronymChars) || !nameBucketList.AllBucketsHaveItems() {
 		return false
 	}
