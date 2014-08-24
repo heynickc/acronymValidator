@@ -1,8 +1,8 @@
 package data_structures
 
 import (
+	"errors"
 	"fmt"
-	// "errors"
 )
 
 type Bucket struct {
@@ -12,13 +12,13 @@ type Bucket struct {
 	availableCapacity int
 }
 
-func (b *Bucket) AddItem(item string) bool {
+func (b *Bucket) AddItem(item string) error {
 	if b.availableCapacity > 0 {
 		b.items = InsertStringSlice(b.items, []string{item}, 0)
 		b.availableCapacity--
-		return true
+		return nil
 	} else {
-		return false
+		return errors.New("Can't add anymore")
 	}
 }
 
@@ -26,16 +26,30 @@ type BucketList struct {
 	buckets []Bucket
 }
 
-func (bl *BucketList) AddItemAtIndex(index int, item string) {
-	ok := bl.buckets[index].AddItem(item)
-	if !ok {
-		fmt.Println("Not ok")
-		fmt.Println(bl.buckets[index].availableCapacity)
+func (bl *BucketList) AddItemAtIndex(index int, item string) error {
+	err := bl.buckets[index].AddItem(item)
+	if err != nil {
+		err := bl.TryToResizeAtIndex(index)
+		if err != nil {
+			return errors.New("Can't resize")
+		}
+		bl.AddItemAtIndex(index, item)
 	}
+	return nil
 }
 
-func (bl *BucketList) TryToResizeAtIndex(index int) {
-
+func (bl *BucketList) TryToResizeAtIndex(index int) error {
+	// fmt.Println(bl.buckets[index])
+	fmt.Println(bl.GetTotalCapacityAfterIndex(index))
+	fmt.Println(len(bl.buckets[index+1:]))
+	if len(bl.buckets[index+1:]) >= bl.GetTotalCapacityAfterIndex(index)-1 {
+		return errors.New("Not enough capacity left")
+	} else {
+		bl.buckets[index].capacity++
+		bl.buckets[index].availableCapacity++
+		bl.SetCapacitiesAfterIndex(bl.GetTotalCapacityAfterIndex(index)-1, index)
+	}
+	return nil
 }
 
 func (bl *BucketList) ResetCapacities() {
@@ -46,7 +60,7 @@ func (bl *BucketList) ResetCapacities() {
 }
 
 func (bl *BucketList) ResetCapacitiesAfterIndex(index int) {
-	for i := index; i < len(bl.buckets); i++ {
+	for i := index + 1; i < len(bl.buckets); i++ {
 		bl.buckets[i].capacity = 0
 		bl.buckets[i].availableCapacity = 0
 	}
@@ -71,7 +85,7 @@ func (bl *BucketList) SetCapacitiesAfterIndex(count int, index int) {
 		if count == 0 {
 			break
 		}
-		for i := index; count > 0 && i < len(bl.buckets); i, count = i+1, count-1 {
+		for i := index + 1; count > 0 && i < len(bl.buckets); i, count = i+1, count-1 {
 			bl.buckets[i].capacity++
 			bl.buckets[i].availableCapacity++
 		}
