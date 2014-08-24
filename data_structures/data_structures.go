@@ -2,7 +2,8 @@ package data_structures
 
 import (
 	"errors"
-	"fmt"
+	utils "github.com/heynickc/acronym_validator/utilities"
+	"strings"
 )
 
 type Bucket struct {
@@ -14,7 +15,6 @@ type Bucket struct {
 
 func (b *Bucket) AddItem(item string) error {
 	if b.AvailableCapacity > 0 {
-		// b.Items = InsertStringSlice(b.Items, []string{item}, 0)
 		b.Items = append(b.Items, item)
 		b.AvailableCapacity--
 		return nil
@@ -32,7 +32,7 @@ func (bl *BucketList) AddItemAtIndex(index int, item string) error {
 	if err != nil {
 		err := bl.TryToResizeAtIndex(index)
 		if err != nil {
-			fmt.Println(err)
+			// fmt.Println(err)
 			return errors.New("Can't resize")
 		} else {
 			bl.AddItemAtIndex(index, item)
@@ -46,12 +46,13 @@ func (bl *BucketList) AddBucket(bucket Bucket) {
 }
 
 func (bl *BucketList) TryToResizeAtIndex(index int) error {
-	if len(bl.Buckets[index+1:]) >= bl.GetTotalCapacityAfterIndex(index) {
+	totalAvailableCapacity := bl.GetTotalCapacityAfterIndex(index) + bl.GetAvailableCapacityBeforeIndex(index)
+	if len(bl.Buckets[index+1:]) >= totalAvailableCapacity {
 		return errors.New("Not enough capacity left")
 	} else {
 		bl.Buckets[index].Capacity++
 		bl.Buckets[index].AvailableCapacity++
-		bl.SetCapacitiesAfterIndex(bl.GetTotalCapacityAfterIndex(index)-1, index)
+		bl.SetCapacitiesAfterIndex(totalAvailableCapacity-1, index)
 	}
 	return nil
 }
@@ -112,6 +113,31 @@ func (bl *BucketList) GetTotalCapacityAfterIndex(index int) int {
 	return totalCapacity
 }
 
-func InsertStringSlice(slice, insertion []string, index int) []string {
-	return append(slice[:index], append(insertion, slice[index:]...)...)
+func (bl *BucketList) GetAvailableCapacityBeforeIndex(index int) int {
+	totalAvailableCapacity := 0
+	for _, bucket := range bl.Buckets[:index] {
+		totalAvailableCapacity = totalAvailableCapacity + bucket.AvailableCapacity
+	}
+	return totalAvailableCapacity
+}
+
+func (bl *BucketList) GetAllItems() []string {
+	var items []string
+	for _, bucket := range bl.Buckets {
+		items = utils.InsertStringSlice(items, bucket.Items, len(items))
+	}
+	return items
+}
+
+func (bl *BucketList) GetAllItemsSquashed() string {
+	return strings.Join(bl.GetAllItems(), "")
+}
+
+func (bl *BucketList) AllBucketsHaveItems() bool {
+	for _, bucket := range bl.Buckets {
+		if len(bucket.Items) == 0 {
+			return false
+		}
+	}
+	return true
 }

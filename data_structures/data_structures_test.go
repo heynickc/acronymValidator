@@ -32,16 +32,6 @@ func TestSetCapacitiesAfterIndex(t *testing.T) {
 	// fmt.Println(bucketList)
 }
 
-// func TestAddItemAtIndex(t *testing.T) {
-// 	bucketList.ResetCapacities()
-// 	bucketList.SetCapacities(5)
-// 	itemToAdd := "G"
-// 	bucketList.AddItemAtIndex(0, itemToAdd)
-// 	bucketList.AddItemAtIndex(0, itemToAdd)
-// 	bucketList.AddItemAtIndex(1, itemToAdd)
-// 	fmt.Println(bucketList)
-// }
-
 func TestTryToResizeAtIndex(t *testing.T) {
 	bucketList.ResetCapacities()
 	bucketList.SetCapacities(7)
@@ -50,19 +40,16 @@ func TestTryToResizeAtIndex(t *testing.T) {
 	bucketList.AddItemAtIndex(0, itemToAdd)
 	bucketList.AddItemAtIndex(0, itemToAdd)
 
-	fmt.Println(bucketList)
-	// err := bucketList.TryToResizeAtIndex(0)
-	// fmt.Println(err)
 	// fmt.Println(bucketList)
-	err := bucketList.AddItemAtIndex(0, itemToAdd)
-	fmt.Println(err)
+	// err := bucketList.AddItemAtIndex(0, itemToAdd)
+	// fmt.Println(err)
 
 	bucketList.AddItemAtIndex(1, itemToAdd)
 	bucketList.AddItemAtIndex(1, itemToAdd)
-	err2 := bucketList.AddItemAtIndex(1, itemToAdd)
+	// err2 := bucketList.AddItemAtIndex(1, itemToAdd)
 
-	fmt.Println(bucketList)
-	fmt.Println(err2)
+	// fmt.Println(bucketList)
+	// fmt.Println(err2)
 }
 
 func TestAddBucket(t *testing.T) {
@@ -70,5 +57,18 @@ func TestAddBucket(t *testing.T) {
 	var bucketToAdd = Bucket{"GISi", make([]string, 0), 0, 0}
 
 	bucketListEmpty.AddBucket(bucketToAdd)
-	fmt.Println(bucketListEmpty)
+	// fmt.Println(bucketListEmpty)
+}
+
+func TestGetAvailableCapacityBeforeIndex(t *testing.T) {
+	var bl = BucketList{make([]Bucket, 0)}
+	var bucketToAdd = Bucket{"GISi", []string{"G", "I"}, 3, 1}
+	var bucketToAdd1 = Bucket{"GISi", []string{"G", "I"}, 3, 1}
+	var bucketToAdd2 = Bucket{"GISi", []string{"G", "I"}, 3, 1}
+
+	bl.AddBucket(bucketToAdd)
+	bl.AddBucket(bucketToAdd1)
+	bl.AddBucket(bucketToAdd2)
+
+	fmt.Println(bl.GetAvailableCapacityBeforeIndex(2)) //should be 2
 }

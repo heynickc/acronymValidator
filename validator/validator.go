@@ -2,26 +2,18 @@ package validator
 
 import (
 	"fmt"
-	// "math"
-	// "sort"
 	ds "github.com/heynickc/acronym_validator/data_structures"
+	utils "github.com/heynickc/acronym_validator/utilities"
 	"strings"
 )
 
 func IsValid(acronym string, productName []string) bool {
 	fmt.Printf("Testing %v against %v\n", acronym, productName)
 
-	// Process the inputs
-	for i, _ := range productName {
-		productName[i] = strings.ToLower(productName[i])
-	}
-	acronymChars := strings.Split(strings.ToLower(acronym), "")
+	var acronymChars []string
+	productName, acronymChars = ProcessInputs(acronym, productName)
 
-	var nameBucketList = ds.BucketList{make([]ds.Bucket, 0)}
-
-	for _, name := range productName {
-		nameBucketList.AddBucket(ds.Bucket{name, make([]string, 0), 0, 0})
-	}
+	var nameBucketList = GetProductNameBuckets(productName)
 
 	if len(acronymChars) >= len(productName) {
 		nameBucketList.SetCapacities(len(acronymChars))
@@ -29,38 +21,45 @@ func IsValid(acronym string, productName []string) bool {
 		return false
 	}
 
-	acronymCharsCopy := make([]string, len(acronymChars))
-	copy(acronymCharsCopy, acronymChars)
-	for len(acronymCharsCopy) > 0 {
+	for len(acronymChars) > 0 {
 		var char string
-		char, acronymCharsCopy = Pop(acronymCharsCopy)
-		for i := 0; i < len(productName); i++ {
-			if strings.Contains(productName[i], char) {
-				// fmt.Println(char)
-				// fmt.Println(acronymCharsCopy)
-
+		char, acronymChars = utils.Pop(acronymChars)
+		for i, name := range productName {
+			if strings.Contains(name, char) {
 				err := nameBucketList.AddItemAtIndex(i, char)
 				if err != nil {
-					fmt.Println(err)
+					continue
 				} else {
-					productName[i] = productName[i][strings.Index(productName[i], char):]
-					// fmt.Println(productName)
+					productName[i] = productName[i][strings.Index(name, char)+1:]
 					break
 				}
+			} else {
+				productName[i] = ""
+				continue
 			}
 		}
 	}
 
-	fmt.Println(nameBucketList)
+	matchedAcronymChars := nameBucketList.GetAllItemsSquashed()
+	if !strings.EqualFold(acronym, matchedAcronymChars) || !nameBucketList.AllBucketsHaveItems() {
+		return false
+	}
 
 	return true
 }
 
-func Pop(strings []string) (string, []string) {
-	popped, strings := strings[0], strings[1:len(strings)]
-	return popped, strings
+func ProcessInputs(acronym string, productName []string) ([]string, []string) {
+	for i, _ := range productName {
+		productName[i] = strings.ToLower(productName[i])
+	}
+	acronymChars := strings.Split(strings.ToLower(acronym), "")
+	return productName, acronymChars
 }
 
-func InsertStringSlice(slice, insertion []string, index int) []string {
-	return append(slice[:index], append(insertion, slice[index:]...)...)
+func GetProductNameBuckets(productName []string) ds.BucketList {
+	var nameBucketList = ds.BucketList{make([]ds.Bucket, 0)}
+	for _, name := range productName {
+		nameBucketList.AddBucket(ds.Bucket{name, make([]string, 0), 0, 0})
+	}
+	return nameBucketList
 }
