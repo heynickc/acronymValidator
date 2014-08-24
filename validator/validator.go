@@ -2,8 +2,8 @@ package validator
 
 import (
 	"fmt"
-	ds "github.com/heynickc/acronyValidator/data_structures"
-	utils "github.com/heynickc/acronyValidator/utilities"
+	ds "github.com/heynickc/acronymValidator/data_structures"
+	utils "github.com/heynickc/acronymValidator/utilities"
 	"strings"
 )
 
