@@ -3,6 +3,12 @@ language: go
 go:
   - 1.2
 
-install: go get -v github.com/heynickc/acronymValidator/validator
+install:
+  - go get -v github.com/heynickc/acronymValidator/validator
+  - go get -v github.com/heynickc/acronymValidator/data_structures
+  - go get -v github.com/heynickc/acronymValidator/utilities
 
-script: go test ./validator
+
+script:
+  - go test ./validator
+  - go test ./data_structures
