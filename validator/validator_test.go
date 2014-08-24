@@ -11,7 +11,7 @@ type testPair struct {
 }
 
 var testPairsIsValid = []testPair{
-	{"GIZTK3", []string{"GISi", "Zombie", "Tracker", "3000"}, true},
+	// {"GIZTK3", []string{"GISi", "Zombie", "Tracker", "3000"}, true},
 	// {"GZT3", []string{"GISi", "Zombie", "Tracker", "3000"}, true},
 	// {"GISEE0", []string{"GISi", "Zombie", "Tracker", "3000"}, true},
 	// {"GZT3k", []string{"GISi", "Zombie", "Tracker", "3000"}, false},
@@ -22,7 +22,7 @@ var testPairsIsValid = []testPair{
 	// {"GEANIE", []string{"Google", "Search", "Engine"}, true},
 	// {"OOSN", []string{"Google", "Search", "Engine"}, true},
 	// {"LEACHE", []string{"Google", "Search", "Engine"}, true},
-	{"OOGLEE", []string{"Google", "Search", "Engine"}, true},
+	// {"OOGLEE", []string{"Google", "Search", "Engine"}, true},
 	// {"GOOSEEE", []string{"Google", "Search", "Engine"}, true},
 	// {"GGSEE", []string{"Google", "Search", "Engine"}, true},
 	// {"GGSE", []string{"Google", "Search", "Engine"}, true},
@@ -30,7 +30,7 @@ var testPairsIsValid = []testPair{
 	// {"GEANIEOOSN", []string{"Google", "Search", "Engine"}, false},
 	// {"OGGLEE", []string{"Google", "Search", "Engine"}, false},
 	// {"GGG", []string{"Google", "Search", "Engine"}, false},
-	// {"GGSEA", []string{"Google", "Search", "Engine"}, false},
+	{"GGSEA", []string{"Google", "Search", "Engine"}, false},
 }
 
 func TestIsValid(t *testing.T) {
