@@ -2,7 +2,6 @@ package data_structures
 
 import (
 	"errors"
-	"fmt"
 )
 
 type Bucket struct {
@@ -39,9 +38,6 @@ func (bl *BucketList) AddItemAtIndex(index int, item string) error {
 }
 
 func (bl *BucketList) TryToResizeAtIndex(index int) error {
-	// fmt.Println(bl.buckets[index])
-	fmt.Println(bl.GetTotalCapacityAfterIndex(index))
-	fmt.Println(len(bl.buckets[index+1:]))
 	if len(bl.buckets[index+1:]) >= bl.GetTotalCapacityAfterIndex(index)-1 {
 		return errors.New("Not enough capacity left")
 	} else {

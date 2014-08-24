@@ -57,4 +57,10 @@ func TestTryToResizeAtIndex(t *testing.T) {
 	err := bucketList.AddItemAtIndex(0, itemToAdd)
 	fmt.Println(err)
 
+	bucketList.AddItemAtIndex(1, itemToAdd)
+	bucketList.AddItemAtIndex(1, itemToAdd)
+	err2 := bucketList.AddItemAtIndex(1, itemToAdd)
+
+	fmt.Println(bucketList)
+	fmt.Println(err2)
 }
