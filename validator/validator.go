@@ -1,9 +1,9 @@
 package validator
 
 import (
-	ds "./data_structures"
-	utils "./utilities"
 	"fmt"
+	ds "github.com/heynickc/acronyValidator/data_structures"
+	utils "github.com/heynickc/acronymValidator/utilities"
 	"strings"
 )
 
