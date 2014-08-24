@@ -5,16 +5,16 @@ import (
 )
 
 type Bucket struct {
-	name              string
-	items             []string
-	capacity          int
-	availableCapacity int
+	Name              string
+	Items             []string
+	Capacity          int
+	AvailableCapacity int
 }
 
 func (b *Bucket) AddItem(item string) error {
-	if b.availableCapacity > 0 {
-		b.items = InsertStringSlice(b.items, []string{item}, 0)
-		b.availableCapacity--
+	if b.AvailableCapacity > 0 {
+		b.Items = InsertStringSlice(b.Items, []string{item}, 0)
+		b.AvailableCapacity--
 		return nil
 	} else {
 		return errors.New("Can't add anymore")
@@ -22,11 +22,11 @@ func (b *Bucket) AddItem(item string) error {
 }
 
 type BucketList struct {
-	buckets []Bucket
+	Buckets []Bucket
 }
 
 func (bl *BucketList) AddItemAtIndex(index int, item string) error {
-	err := bl.buckets[index].AddItem(item)
+	err := bl.Buckets[index].AddItem(item)
 	if err != nil {
 		err := bl.TryToResizeAtIndex(index)
 		if err != nil {
@@ -37,28 +37,32 @@ func (bl *BucketList) AddItemAtIndex(index int, item string) error {
 	return nil
 }
 
+func (bl *BucketList) AddBucket(bucket Bucket) {
+	bl.Buckets = append(bl.Buckets, bucket)
+}
+
 func (bl *BucketList) TryToResizeAtIndex(index int) error {
-	if len(bl.buckets[index+1:]) >= bl.GetTotalCapacityAfterIndex(index)-1 {
-		return errors.New("Not enough capacity left")
+	if len(bl.Buckets[index+1:]) >= bl.GetTotalCapacityAfterIndex(index)-1 {
+		return errors.New("Not enough Capacity left")
 	} else {
-		bl.buckets[index].capacity++
-		bl.buckets[index].availableCapacity++
+		bl.Buckets[index].Capacity++
+		bl.Buckets[index].AvailableCapacity++
 		bl.SetCapacitiesAfterIndex(bl.GetTotalCapacityAfterIndex(index)-1, index)
 	}
 	return nil
 }
 
 func (bl *BucketList) ResetCapacities() {
-	for i := 0; i < len(bl.buckets); i++ {
-		bl.buckets[i].capacity = 0
-		bl.buckets[i].availableCapacity = 0
+	for i := 0; i < len(bl.Buckets); i++ {
+		bl.Buckets[i].Capacity = 0
+		bl.Buckets[i].AvailableCapacity = 0
 	}
 }
 
 func (bl *BucketList) ResetCapacitiesAfterIndex(index int) {
-	for i := index + 1; i < len(bl.buckets); i++ {
-		bl.buckets[i].capacity = 0
-		bl.buckets[i].availableCapacity = 0
+	for i := index + 1; i < len(bl.Buckets); i++ {
+		bl.Buckets[i].Capacity = 0
+		bl.Buckets[i].AvailableCapacity = 0
 	}
 }
 
@@ -67,9 +71,9 @@ func (bl *BucketList) SetCapacities(count int) {
 		if count == 0 {
 			break
 		}
-		for i := 0; count > 0 && i < len(bl.buckets); i, count = i+1, count-1 {
-			bl.buckets[i].capacity++
-			bl.buckets[i].availableCapacity++
+		for i := 0; count > 0 && i < len(bl.Buckets); i, count = i+1, count-1 {
+			bl.Buckets[i].Capacity++
+			bl.Buckets[i].AvailableCapacity++
 		}
 	}
 }
@@ -81,25 +85,25 @@ func (bl *BucketList) SetCapacitiesAfterIndex(count int, index int) {
 		if count == 0 {
 			break
 		}
-		for i := index + 1; count > 0 && i < len(bl.buckets); i, count = i+1, count-1 {
-			bl.buckets[i].capacity++
-			bl.buckets[i].availableCapacity++
+		for i := index + 1; count > 0 && i < len(bl.Buckets); i, count = i+1, count-1 {
+			bl.Buckets[i].Capacity++
+			bl.Buckets[i].AvailableCapacity++
 		}
 	}
 }
 
 func (bl *BucketList) GetTotalCapacity() int {
 	totalCapacity := 0
-	for _, bucket := range bl.buckets {
-		totalCapacity = totalCapacity + bucket.capacity
+	for _, bucket := range bl.Buckets {
+		totalCapacity = totalCapacity + bucket.Capacity
 	}
 	return totalCapacity
 }
 
 func (bl *BucketList) GetTotalCapacityAfterIndex(index int) int {
 	totalCapacity := 0
-	for _, bucket := range bl.buckets[index+1:] {
-		totalCapacity = totalCapacity + bucket.capacity
+	for _, bucket := range bl.Buckets[index+1:] {
+		totalCapacity = totalCapacity + bucket.Capacity
 	}
 	return totalCapacity
 }

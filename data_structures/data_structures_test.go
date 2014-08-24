@@ -64,3 +64,11 @@ func TestTryToResizeAtIndex(t *testing.T) {
 	fmt.Println(bucketList)
 	fmt.Println(err2)
 }
+
+func TestAddBucket(t *testing.T) {
+	var bucketListEmpty = BucketList{make([]Bucket, 0)}
+	var bucketToAdd = Bucket{"GISi", make([]string, 0), 0, 0}
+
+	bucketListEmpty.AddBucket(bucketToAdd)
+	fmt.Println(bucketListEmpty)
+}

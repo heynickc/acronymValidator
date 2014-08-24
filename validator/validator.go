@@ -4,6 +4,7 @@ import (
 	"fmt"
 	// "math"
 	// "sort"
+	ds "github.com/heynickc/acronym_validator/data_structures"
 	"strings"
 )
 
@@ -25,33 +26,47 @@ func IsValid(acronym string, productName []string) bool {
 	squashedProductNameChars := strings.Split(squashedProductName, "")
 	validAcronymChars := make([]string, 0)
 
-	// for i, name := range productName {
-	// 	for _, acronymChar := range acronymChars {
-
-	// 		if strings.Contains(name, acronymChar) {
-	// 			acronymCharLocation := strings.Index(name, acronymChar)
-	// 			productNamesRepresentedFlag[i] = true
-	// 			productNamesRepresented = append(productNamesRepresented, name)
-
-	// 			// break
+	// for i := 0; i < len(productName); i++ {
+	// 	acronymCharsCopy := make([]string, len(acronymChars))
+	// 	copy(acronymCharsCopy, acronymChars)
+	// 	container := make([]string, 0)
+	// 	for len(acronymCharsCopy) > 0 {
+	// 		var char string
+	// 		char, acronymCharsCopy = Pop(acronymCharsCopy)
+	// 		if strings.Contains(productName[i], char) {
+	// 			// Insert at beginning
+	// 			container = InsertStringSlice(container, []string{char}, 0)
 	// 		}
 	// 	}
+	// 	fmt.Println(container)
 	// }
 
+	var nameBucketList = ds.BucketList{make([]ds.Bucket, 0)}
+
+	for _, name := range productName {
+		nameBucketList.AddBucket(ds.Bucket{name, make([]string, 0), 0, 0})
+	}
+
+	if len(acronymChars) >= len(productName) {
+		nameBucketList.SetCapacities(len(acronymChars))
+	} else {
+		return false
+	}
+
+	acronymCharsCopy := make([]string, len(acronymChars))
+	copy(acronymCharsCopy, acronymChars)
+	fmt.Println(acronymCharsCopy)
 	for i := 0; i < len(productName); i++ {
-		acronymCharsCopy := make([]string, len(acronymChars))
-		copy(acronymCharsCopy, acronymChars)
-		container := make([]string, 0)
 		for len(acronymCharsCopy) > 0 {
 			var char string
 			char, acronymCharsCopy = Pop(acronymCharsCopy)
 			if strings.Contains(productName[i], char) {
-				// Insert at beginning
-				container = InsertStringSlice(container, []string{char}, 0)
+				nameBucketList.AddItemAtIndex(i, char)
 			}
 		}
-		fmt.Println(container)
 	}
+
+	fmt.Println(nameBucketList)
 
 	for _, acronymChar := range acronymChars {
 		if strings.Contains(squashedProductName, acronymChar) {
