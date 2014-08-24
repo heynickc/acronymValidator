@@ -13,7 +13,8 @@ type Bucket struct {
 
 func (b *Bucket) AddItem(item string) error {
 	if b.AvailableCapacity > 0 {
-		b.Items = InsertStringSlice(b.Items, []string{item}, 0)
+		// b.Items = InsertStringSlice(b.Items, []string{item}, 0)
+		b.Items = append(b.Items, item)
 		b.AvailableCapacity--
 		return nil
 	} else {
@@ -31,8 +32,9 @@ func (bl *BucketList) AddItemAtIndex(index int, item string) error {
 		err := bl.TryToResizeAtIndex(index)
 		if err != nil {
 			return errors.New("Can't resize")
+		} else {
+			bl.AddItemAtIndex(index, item)
 		}
-		bl.AddItemAtIndex(index, item)
 	}
 	return nil
 }
@@ -43,7 +45,7 @@ func (bl *BucketList) AddBucket(bucket Bucket) {
 
 func (bl *BucketList) TryToResizeAtIndex(index int) error {
 	if len(bl.Buckets[index+1:]) >= bl.GetTotalCapacityAfterIndex(index)-1 {
-		return errors.New("Not enough Capacity left")
+		return errors.New("Not enough capacity left")
 	} else {
 		bl.Buckets[index].Capacity++
 		bl.Buckets[index].AvailableCapacity++

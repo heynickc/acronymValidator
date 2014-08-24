@@ -55,13 +55,22 @@ func IsValid(acronym string, productName []string) bool {
 
 	acronymCharsCopy := make([]string, len(acronymChars))
 	copy(acronymCharsCopy, acronymChars)
-	fmt.Println(acronymCharsCopy)
-	for i := 0; i < len(productName); i++ {
-		for len(acronymCharsCopy) > 0 {
-			var char string
-			char, acronymCharsCopy = Pop(acronymCharsCopy)
+	for len(acronymCharsCopy) > 0 {
+		var char string
+		char, acronymCharsCopy = Pop(acronymCharsCopy)
+		for i := 0; i < len(productName); i++ {
 			if strings.Contains(productName[i], char) {
-				nameBucketList.AddItemAtIndex(i, char)
+				// fmt.Println(char)
+				// fmt.Println(acronymCharsCopy)
+
+				err := nameBucketList.AddItemAtIndex(i, char)
+				if err != nil {
+					fmt.Println(err)
+				} else {
+					productName[i] = productName[i][strings.Index(productName[i], char):]
+					// fmt.Println(productName)
+					break
+				}
 			}
 		}
 	}
@@ -99,7 +108,7 @@ func IsValid(acronym string, productName []string) bool {
 }
 
 func Pop(strings []string) (string, []string) {
-	popped, strings := strings[len(strings)-1], strings[:len(strings)-1]
+	popped, strings := strings[0], strings[1:len(strings)]
 	return popped, strings
 }
 
