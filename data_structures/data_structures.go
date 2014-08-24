@@ -1,8 +1,8 @@
 package data_structures
 
 import (
+	utils "./utilities"
 	"errors"
-	utils "github.com/heynickc/acronym_validator/utilities"
 	"strings"
 )
 
