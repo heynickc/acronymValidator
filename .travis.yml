@@ -3,6 +3,10 @@ language: go
 go:
   - 1.2
 
+before_install:
+  - cp .netrc ~
+  - chmod 600 .netrc
+
 install:
   - go get -v github.com/heynickc/acronymValidator/validator
   - go get -v github.com/heynickc/acronymValidator/data_structures
