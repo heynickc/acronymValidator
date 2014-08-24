@@ -9,6 +9,9 @@ before_install:
 
 install:
   - go get -v github.com/heynickc/acronymValidator/utilties
+  - go get -v github.com/heynickc/acronymValidator/data_structures
+  - go get -v github.com/heynickc/acronymValidator/validator
+
 
 script:
   - go test ./validator
