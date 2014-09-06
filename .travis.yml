@@ -8,7 +8,7 @@ before_install:
   - chmod 600 .netrc
 
 install:
-  - go get -v github.com/heynickc/acronymValidator/validator
+  - go get -v github.com/heynickc/acronym_validator/validator
 
 script:
   - go test ./validator
